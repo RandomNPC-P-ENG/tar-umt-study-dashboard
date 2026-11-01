@@ -1,0 +1,2 @@
+# iCalendar folding may include significant trailing spaces and CRLF.
+*.ics -text whitespace=cr-at-eol,-blank-at-eol

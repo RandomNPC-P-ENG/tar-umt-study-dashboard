@@ -137,17 +137,25 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:tarumt-202609-1-1-7@study-dashboard.local
-DTSTAMP:20261101T000000Z
+DTSTAMP:20261101T130122Z
 DTSTART;TZID=Asia/Kuala_Lumpur:20261103T153000
 DTEND;TZID=Asia/Kuala_Lumpur:20261103T163000
 RRULE:FREQ=WEEKLY;COUNT=7
-SUMMARY:健身 A · 上肢
-DESCRIPTION:个人学习与健身计划，可按实际情况调整。
+SUMMARY:Workout A — Muscle-up
+DESCRIPTION:Muscle-up / Explosive Pull\n15:30–16:30；预计 60 分钟\n
+ 热身 8 分钟；放松 5 分钟\nExplosive Pull-up: 4 × 3；组间休
+ 息 180 秒\nStrict Pull-up: 3 × 4–6；组间休息 120 秒\nStraight-b
+ ar Dip: 3 × 5–8；组间休息 120 秒\nHollow Body Hold: 2 × 20–30 
+ 秒；组间休息 60 秒\n技术优先，不需每组力竭。出现肘
+ 部卡住、疼痛或活动受限时暂停受影响动作；持续或反
+ 复出现请寻求临床评估。\n网页编辑不会自动同步外部日
+ 历。
 CATEGORIES:FITNESS
+SEQUENCE:1
 BEGIN:VALARM
 TRIGGER:-PT5M
 ACTION:DISPLAY
-DESCRIPTION:健身 A · 上肢
+DESCRIPTION:Workout A — Muscle-up · 15:30 · 60 分钟
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
@@ -368,17 +376,24 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:tarumt-202609-4-4-6@study-dashboard.local
-DTSTAMP:20261101T000000Z
+DTSTAMP:20261101T130122Z
 DTSTART;TZID=Asia/Kuala_Lumpur:20261106T150000
 DTEND;TZID=Asia/Kuala_Lumpur:20261106T160000
 RRULE:FREQ=WEEKLY;COUNT=7
-SUMMARY:健身 B · 下肢与核心
-DESCRIPTION:个人学习与健身计划，可按实际情况调整。
+SUMMARY:Workout B — Planche
+DESCRIPTION:Planche / Push Stability\n15:00–16:00；预计 60 分钟\n热
+ 身 8 分钟；放松 5 分钟\nPlanche Lean: 4 × 8–12 秒；组间休
+ 息 90 秒\nPseudo Planche Push-up: 3 × 5–8；组间休息 120 秒\nPik
+ e Push-up: 3 × 6–10；组间休息 90 秒\nPush-up Plus: 2 × 12；组
+ 间休息 60 秒\n技术优先，不需每组力竭。出现肘部卡住
+ 、疼痛或活动受限时暂停受影响动作；持续或反复出现
+ 请寻求临床评估。\n网页编辑不会自动同步外部日历。
 CATEGORIES:FITNESS
+SEQUENCE:1
 BEGIN:VALARM
 TRIGGER:-PT5M
 ACTION:DISPLAY
-DESCRIPTION:健身 B · 下肢与核心
+DESCRIPTION:Workout B — Planche · 15:00 · 60 分钟
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
@@ -473,17 +488,25 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:tarumt-202609-6-6-7@study-dashboard.local
-DTSTAMP:20261101T000000Z
+DTSTAMP:20261101T130122Z
 DTSTART;TZID=Asia/Kuala_Lumpur:20261108T153000
 DTEND;TZID=Asia/Kuala_Lumpur:20261108T163000
 RRULE:FREQ=WEEKLY;COUNT=7
-SUMMARY:健身 C · 全身训练
-DESCRIPTION:个人学习与健身计划，可按实际情况调整。
+SUMMARY:Workout C — Front Lever
+DESCRIPTION:Front Lever / Core Stability\n15:30–16:30；预计 60 分钟\
+ n热身 8 分钟；放松 5 分钟\nTuck Front Lever Hold: 4 × 5–10 秒
+ ；组间休息 120 秒\nInverted Row: 3 × 8–12；组间休息 90 秒\n
+ Ab Wheel Rollout: 2 × 6–10；组间休息 90 秒\nSide Plank: 2 × 每
+ 侧 30 秒；组间休息 60 秒\n技术优先，不需每组力竭。出
+ 现肘部卡住、疼痛或活动受限时暂停受影响动作；持续
+ 或反复出现请寻求临床评估。\n网页编辑不会自动同步外
+ 部日历。
 CATEGORIES:FITNESS
+SEQUENCE:1
 BEGIN:VALARM
 TRIGGER:-PT5M
 ACTION:DISPLAY
-DESCRIPTION:健身 C · 全身训练
+DESCRIPTION:Workout C — Front Lever · 15:30 · 60 分钟
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT

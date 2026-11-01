@@ -1,2 +1,35 @@
 *{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#15233c;font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:850px;margin:auto;padding:18px 14px 50px}header{display:flex;justify-content:space-between;align-items:center;padding:18px 4px}h1{font-size:29px;margin:4px 0}h2{font-size:19px;margin:0}p{margin:5px 0;color:#66758a}.eyebrow{font-size:11px;letter-spacing:1.3px;color:#5676aa;font-weight:700}.notice{border:1px solid #e7b4b4;background:#fff0f0;padding:14px;border-radius:15px;color:#943a3a;margin:10px 0 18px}.notice div{font-size:13px;margin-top:4px}.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.days button{padding:12px 0;font-size:12px}.days button.active{background:#174fa6;color:white;border-color:#174fa6}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:17px 0}.summary div{background:white;border-radius:14px;padding:12px;display:flex;flex-direction:column}.summary span{color:#7b8799;font-size:11px}.summary strong{font-size:21px}.sectiontitle{display:flex;align-items:center;justify-content:space-between;margin:24px 0 12px;gap:8px}.sectiontitle p{font-size:12px}.filters{display:flex;gap:7px;overflow:auto;padding-bottom:12px}.filters button{white-space:nowrap;font-size:12px;padding:7px 10px}.filters .off{opacity:.4}.events{display:grid;gap:8px}.event{display:grid;grid-template-columns:78px 5px 1fr;gap:9px;align-items:stretch}.times{display:flex;flex-direction:column;justify-content:center;font-size:12px;font-variant-numeric:tabular-nums}.times small{color:#8a96a7}.stripe{border-radius:8px}.eventbody{display:flex;gap:9px;align-items:center;background:white;padding:12px;border-radius:12px;min-height:57px}.eventbody label{flex:1;cursor:pointer}.eventbody input{width:17px;height:17px;accent-color:#174fa6}.eventbody .done{text-decoration:line-through;color:#8996a7}.eventbody small{display:block;color:#7d899b;font-size:11px}.eventbody button{padding:4px 8px}.panel{background:white;padding:16px;border-radius:16px;margin-top:20px}.panel h2{margin-bottom:12px}.panel input,.panel select{width:100%;padding:10px;border:1px solid #d3dce8;border-radius:9px;font:inherit;margin:5px 0 10px}.twocol{display:grid;grid-template-columns:1fr 1fr;gap:12px}.twocol label{font-size:12px}button{border:1px solid #d4deed;background:white;color:#1a3761;border-radius:10px;padding:9px 13px;font-weight:650;cursor:pointer}form>button{background:#174fa6;color:white;width:100%;border:0}.outline{background:transparent}footer{text-align:center;color:#8996a7;font-size:12px;margin-top:24px}@media(max-width:420px){.event{grid-template-columns:68px 4px 1fr}.days button{font-size:11px}.summary strong{font-size:18px}}@media(prefers-color-scheme:dark){body{background:#101827;color:#ecf2fc}p{color:#aab8ca}.summary div,.eventbody,.panel{background:#1c2a3e}.notice{background:#40252b;border-color:#8b4652;color:#ffd5d9}button{background:#22334b;color:#e8f1ff;border-color:#344b68}.outline{background:transparent}.panel input,.panel select{background:#162338;color:#fff;border-color:#40536d}}
 .calendar-download{display:inline-block;margin:10px 0;padding:11px 15px;border-radius:10px;background:#174fa6;color:#fff;text-decoration:none;font-weight:650}.calendar-download:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #d17c38;outline-offset:3px}
+
+/* Calisthenics uses the existing panel, fitness colour and theme. */
+.training-panel{border-top:4px solid #d17c38}
+.training-slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}
+.workout-card{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:6px;border-left:4px solid #d17c38;min-width:0;padding:12px}
+.workout-card.selected{box-shadow:0 0 0 2px #d17c38}
+.workout-card span,.workout-card small{font-weight:400;overflow-wrap:anywhere}
+.training-caution{background:#fff5e7;color:#71400e;border:1px solid #e5bc7f;border-radius:12px;padding:13px;margin:14px 0}
+.training-caution p{color:inherit}.training-caution small{display:block;margin-top:8px}
+.training-caution a{color:inherit}.muted{font-size:13px}
+.training-panel p,.skill-record p{overflow-wrap:anywhere}
+dialog{width:min(740px,calc(100vw - 24px));max-height:calc(100dvh - 24px);padding:0;border:1px solid #d3dce8;border-radius:16px;background:#fff;color:#15233c}
+dialog::backdrop{background:#091426a8}
+.dialog-heading{position:sticky;top:0;background:inherit;z-index:1;display:flex;align-items:flex-start;gap:14px;justify-content:space-between;padding:16px;border-bottom:1px solid #d3dce8}
+.dialog-heading h2{font-size:20px}.dialog-heading p{font-size:13px}
+.dialog-heading button{flex-shrink:0}#workoutBody{padding:16px}
+#workoutBody label,.skill-form label,.panel details>label{display:block;margin:8px 0;font-size:14px}
+#workoutBody input:not([type=checkbox]),#workoutBody textarea,.panel textarea,#workoutBody select,.skill-form select{width:100%;min-width:0;padding:10px;border:1px solid #d3dce8;border-radius:9px;font:inherit;color:inherit;background:inherit;margin:5px 0 10px}
+.panel input[type=checkbox],#workoutBody input[type=checkbox]{width:20px;height:20px;margin:0;flex-shrink:0;accent-color:#174fa6}
+#workoutBody .inline-check{display:flex;align-items:flex-start;gap:9px}
+.workout-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.exercise{border:1px solid #d3dce8;border-left:4px solid #d17c38;border-radius:12px;padding:14px;margin:14px 0}
+#workoutBody .exercise-title{display:flex;gap:10px;align-items:center;font-size:16px}
+.exercise-paused{border-left-style:dashed}.risk-tag{color:#945109;display:block;margin:6px 0}
+details{margin:14px 0}summary{cursor:pointer;font-weight:650;padding:9px 0}
+.exercise-editor,.plan-editor,.skill-form{margin-top:12px}
+.exercise-editor>button,.plan-editor>button,.skill-form>button{margin-top:8px}
+.skill-record{border-top:1px solid #d3dce8;padding:12px 0}.skill-record:first-child{margin-top:15px}
+button:disabled,input:disabled{cursor:not-allowed;opacity:.6}
+textarea:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid #d17c38;outline-offset:3px}
+.eventbody{min-width:0;flex-wrap:wrap}.eventbody label{min-width:100px;overflow-wrap:anywhere}.workout-open{font-size:12px}
+@media(max-width:560px){.training-slots{grid-template-columns:1fr}.workout-card{gap:3px}.twocol{gap:8px}.calendar-download{width:100%;text-align:center}.dialog-heading{padding:12px}#workoutBody{padding:12px}.exercise{padding:11px}.eventbody .workout-open{margin-left:26px}.eventbody{gap:7px}}
+@media(prefers-color-scheme:dark){dialog{background:#1c2a3e;color:#ecf2fc;border-color:#40536d}.dialog-heading,.exercise,.skill-record{border-color:#40536d}.exercise{border-left-color:#d17c38}.training-caution{background:#3d3020;color:#ffe0b2;border-color:#87613b}.risk-tag{color:#f4bd7b}#workoutBody input:not([type=checkbox]),#workoutBody textarea,.panel textarea,#workoutBody select{background:#162338;color:#fff;border-color:#40536d}}

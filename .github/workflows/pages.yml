@@ -27,10 +27,12 @@ jobs:
           persist-credentials: false
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
+      - name: Verify timetable, migration and calendar exports
+        run: node --test tests/training.test.cjs
       - name: Prepare static website
         run: |
           mkdir _site
-          cp index.html app.js style.css schedule.json manifest.webmanifest sw.js icon-192.png icon-512.png TAR_UMT_202609_Calendar.ics .nojekyll _site/
+          cp index.html app.js training-core.js calisthenics.js workouts.json style.css schedule.json manifest.webmanifest sw.js icon-192.png icon-512.png TAR_UMT_202609_Calendar.ics .nojekyll _site/
       - name: Upload website
         uses: actions/upload-pages-artifact@v4
         with:

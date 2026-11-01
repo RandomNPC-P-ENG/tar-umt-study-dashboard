@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "calendarStart": "2026-11-02",
+  "calendarEnd": "2026-12-20",
+  "timezone": "Asia/Kuala_Lumpur",
+  "sources": {
+    "caution": "https://www.leicspart.nhs.uk/msk-physiotherapy-resources-getting-started/upper-limb/elbow/",
+    "training": "https://acsm.org/resistance-training-guidelines-update-2026/"
+  },
+  "workouts": [
+    {
+      "id": "A",
+      "name": "Workout A — Muscle-up",
+      "focus": "Muscle-up / Explosive Pull",
+      "durationMinutes": 60,
+      "warmupMinutes": 8,
+      "cooldownMinutes": 5,
+      "exercises": [
+        {
+          "id": "explosive-pullup",
+          "name": "Explosive Pull-up",
+          "sets": 4,
+          "reps": "3",
+          "restSeconds": 180,
+          "caution": true,
+          "progression": "仅在无症状且适合时，改用脚辅助、慢速且可控的拉起；不要用摆荡代替技术。"
+        },
+        {
+          "id": "strict-pullup",
+          "name": "Strict Pull-up",
+          "sets": 3,
+          "reps": "4–6",
+          "restSeconds": 120,
+          "caution": true,
+          "progression": "无症状且适合时，可使用脚辅助或轻阻力辅助；若出现卡住，暂停而不是换动作硬做。"
+        },
+        {
+          "id": "bar-dip",
+          "name": "Straight-bar Dip",
+          "sets": 3,
+          "reps": "5–8",
+          "restSeconds": 120,
+          "caution": true,
+          "progression": "需要负重伸肘。若有卡住、疼痛或不适，直接暂停；不要把辅助版本当作一定安全。"
+        },
+        {
+          "id": "hollow",
+          "name": "Hollow Body Hold",
+          "sets": 2,
+          "reps": "20–30 秒",
+          "restSeconds": 60,
+          "caution": false,
+          "progression": "可屈膝、缩短保持时间，始终保持可控呼吸；任何不适都可以暂停。"
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Workout B — Planche",
+      "focus": "Planche / Push Stability",
+      "durationMinutes": 60,
+      "warmupMinutes": 8,
+      "cooldownMinutes": 5,
+      "exercises": [
+        {
+          "id": "planche-lean",
+          "name": "Planche Lean",
+          "sets": 4,
+          "reps": "8–12 秒",
+          "restSeconds": 90,
+          "caution": true,
+          "progression": "无症状且适合时，减小前倾幅度并缩短保持；不能用更大前倾去克服卡住。"
+        },
+        {
+          "id": "pseudo-pushup",
+          "name": "Pseudo Planche Push-up",
+          "sets": 3,
+          "reps": "5–8",
+          "restSeconds": 120,
+          "caution": true,
+          "progression": "无症状且适合时，可减小前倾、提高支撑面；仍不舒服就暂停。"
+        },
+        {
+          "id": "pike",
+          "name": "Pike Push-up",
+          "sets": 3,
+          "reps": "6–10",
+          "restSeconds": 90,
+          "caution": true,
+          "progression": "无症状且适合时，可提高支撑面并减小幅度；不要强行伸直不适的肘部。"
+        },
+        {
+          "id": "plus",
+          "name": "Push-up Plus",
+          "sets": 2,
+          "reps": "12",
+          "restSeconds": 60,
+          "caution": true,
+          "progression": "无症状且适合时，可降低负荷；若支撑时出现卡住或疼痛，暂停并寻求评估。"
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Workout C — Front Lever",
+      "focus": "Front Lever / Core Stability",
+      "durationMinutes": 60,
+      "warmupMinutes": 8,
+      "cooldownMinutes": 5,
+      "exercises": [
+        {
+          "id": "tuck-lever",
+          "name": "Tuck Front Lever Hold",
+          "sets": 4,
+          "reps": "5–10 秒",
+          "restSeconds": 120,
+          "caution": true,
+          "progression": "直臂负荷较高；有肘部症状时暂停。辅助、缩短杠杆的版本也只在无症状且适合时考虑。"
+        },
+        {
+          "id": "row",
+          "name": "Inverted Row",
+          "sets": 3,
+          "reps": "8–12",
+          "restSeconds": 90,
+          "caution": true,
+          "progression": "无症状且适合时，可增加身体倾角、用脚分担负荷；保持动作可控。"
+        },
+        {
+          "id": "rollout",
+          "name": "Ab Wheel Rollout",
+          "sets": 2,
+          "reps": "6–10",
+          "restSeconds": 90,
+          "caution": true,
+          "progression": "无症状且适合时，使用跪姿和较短行程；出现肘部或腰部不适就暂停。"
+        },
+        {
+          "id": "side-plank",
+          "name": "Side Plank",
+          "sets": 2,
+          "reps": "每侧 30 秒",
+          "restSeconds": 60,
+          "caution": true,
+          "progression": "支撑侧肘部也承受负荷；若不适就暂停。无症状且适合时可用屈膝的较短杠杆版本。"
+        }
+      ]
+    }
+  ]
+}
