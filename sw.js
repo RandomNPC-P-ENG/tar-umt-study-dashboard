@@ -1,5 +1,5 @@
 const CACHE_PREFIX = 'tarumt-study-dashboard-';
-const CACHE = CACHE_PREFIX + 'v2';
+const CACHE = CACHE_PREFIX + 'v3';
 const ASSETS = [
   './', './index.html', './style.css', './app.js', './schedule.json',
   './manifest.webmanifest', './icon-192.png', './icon-512.png',
