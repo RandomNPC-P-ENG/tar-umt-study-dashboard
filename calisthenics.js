@@ -23,23 +23,19 @@
     const {data,schedule}=ctx;
     const cal=C.migrate(ctx.getState(),data,schedule);
     const scheduled=C.slots(schedule);
-    let active=null,recordDate='',lastOpener=null;
+    let active=null,recordDate='';
     const save=()=>ctx.save();
     const workout=id=>C.effective(data.workouts.find(w=>w.id===id),cal);
     const dateFor=day=>C.weekDate(day);
     const currentSession=(date,id,create=false)=>C.session(cal,date,id,create);
     const done=(event,day)=>!!currentSession(dateFor(day),event.workoutId).complete;
-    const dialog=$('workoutDialog');
-    dialog.addEventListener('close',()=>lastOpener&&lastOpener.focus());
-    $('closeWorkout').addEventListener('click',()=>dialog.close());
-    dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close();});
     const message=text=>{$('trainingMessage').textContent=text;};
     const editTemplate=id=>{
       if(!cal.templates[id])cal.templates[id]={exercises:{}};
       if(!cal.templates[id].exercises)cal.templates[id].exercises={};
       return cal.templates[id];
     };
-    const changed=()=>{save();ctx.renderSchedule();};
+    const changed=()=>{save();ctx.refreshTraining();};
     function completion(event,day,value) {
       const s=currentSession(dateFor(day),event.workoutId,true);
       if(s.paused)return;
@@ -67,22 +63,22 @@
       const legacy=Object.values(cal.legacyFitnessDone).filter(Boolean).length;
       $('trainingLegacy').textContent=legacy?'旧健身完成标记已保留 '+legacy+' 条，没有自动计为新动作或技能成绩。':'原有学习勾选、个人任务和设置继续保留；训练按实际日期单独记录。';
     }
-    function open(id,day,opener) {
-      active={id,day,event:scheduled.find(s=>s.day===day&&s.event.workoutId===id).event};
-      recordDate=dateFor(day);lastOpener=opener||document.activeElement;
-      renderDialog();
-      if(!dialog.open)dialog.showModal();
+    function open(id,day) {ctx.openWorkout(id,day);}
+    function mountInline(id,day,host) {
+      const same=active&&active.id===id&&active.day===day;
+      active={id,day,host,event:scheduled.find(s=>s.day===day&&s.event.workoutId===id).event};
+      if(!same)recordDate=dateFor(day);
+      renderDetails();
     }
+    function unmountInline(host) {if(active&&active.host===host)active=null;}
     function refreshCount(w,s) {
-      $('workoutCount').textContent='动作完成 '+w.exercises.filter(e=>s.exercises[e.id]&&s.exercises[e.id].done).length+' / '+w.exercises.length+'；整次训练 '+(s.complete?'已标记完成':'尚未标记')+(s.paused?' · 本次暂停':'');
+      active.host.querySelector('[data-workout-count]').textContent='动作完成 '+w.exercises.filter(e=>s.exercises[e.id]&&s.exercises[e.id].done).length+' / '+w.exercises.length+'；整次训练 '+(s.complete?'已标记完成':'尚未标记')+(s.paused?' · 本次暂停':'');
     }
-    function renderDialog() {
+    function renderDetails() {
       const {id,event}=active,w=workout(id),s=currentSession(recordDate,id,true);
-      $('workoutTitle').textContent=w.name;
-      $('workoutMeta').textContent=names[active.day]+' '+event.start+'–'+event.end+' · '+w.focus+' · 预计 '+w.durationMinutes+' 分钟';
-      const body=$('workoutBody');body.replaceChildren();
+      const body=active.host;body.replaceChildren();
       const date=field('记录日期（可改为实际训练日期）','date',recordDate,{required:true});
-      date.input.addEventListener('change',()=>{if(/^\d{4}-\d{2}-\d{2}$/.test(date.input.value)){recordDate=date.input.value;renderDialog();}});
+      date.input.addEventListener('change',()=>{if(/^\d{4}-\d{2}-\d{2}$/.test(date.input.value)){recordDate=date.input.value;renderDetails();}});
       body.append(date.element);
       if(recordDate<data.calendarStart||recordDate>data.calendarEnd)body.append(node('p',{class:'muted',text:'此记录日期在本学期日历范围之外；不会触发本学期提醒。'}));
       body.append(node('p',{text:'热身 '+w.warmupMinutes+' 分钟 → 主要训练与组间休息 '+(w.durationMinutes-w.warmupMinutes-w.cooldownMinutes)+' 分钟 → 放松 '+w.cooldownMinutes+' 分钟。优先技术，保留余力，不必每组力竭。'}));
@@ -92,14 +88,14 @@
         node('a',{href:data.sources.caution,target:'_blank',rel:'noopener',text:'肘部症状与就诊参考（NHS）'})
       ]);
       const allow=node('input',{type:'checkbox',checked:!cal.pauseRisky,'aria-label':'允许自行启用受影响动作'});
-      allow.addEventListener('change',()=>{cal.pauseRisky=!allow.checked;save();renderDialog();});
+      allow.addEventListener('change',()=>{cal.pauseRisky=!allow.checked;save();renderDetails();});
       caution.append(node('label',{class:'inline-check'},[allow,'允许自行启用受影响动作（如仍卡住或疼痛，不要启用）']),node('small',{text:'初始采用保守模式。较容易的进阶不是无痛或安全的保证；也可以整次暂停。'}));
       body.append(caution);
       const pause=node('button',{type:'button',class:'outline',text:s.paused?'恢复本次训练记录':'暂停本次训练'});
-      pause.addEventListener('click',()=>{s.paused=!s.paused;changed();renderDialog();});
+      pause.addEventListener('click',()=>{s.paused=!s.paused;changed();renderDetails();});
       const whole=node('input',{type:'checkbox',checked:!!s.complete,disabled:!!s.paused,'aria-label':'整次训练已完成'});
       whole.addEventListener('change',()=>{s.complete=whole.checked;s.updatedAt=new Date().toISOString();changed();refreshCount(w,s);});
-      body.append(node('div',{class:'workout-controls'},[pause,node('label',{class:'inline-check'},[whole,'整次训练已完成'])]),node('p',{id:'workoutCount',role:'status'}));
+      body.append(node('div',{class:'workout-controls'},[pause,node('label',{class:'inline-check'},[whole,'整次训练已完成'])]),node('p',{'data-workout-count':'',role:'status'}));
       refreshCount(w,s);
       for(const ex of w.exercises) {
         const log=s.exercises[ex.id]||{};
@@ -117,7 +113,7 @@
         if(blocked)card.append(node('p',{class:'muted',text:'已暂停。暂停不会删除既有记录。'}));
         if(log.done&&log.performed)card.append(node('small',{text:'记录时：'+log.performed.sets+' × '+log.performed.reps+'（修改模板不会重写此记录）'}));
         const individualPause=node('button',{type:'button',class:'outline',text:log.paused?'取消单项暂停':'暂停此动作'});
-        individualPause.addEventListener('click',()=>{const r=s.exercises[ex.id]||(s.exercises[ex.id]={});r.paused=!r.paused;changed();renderDialog();});
+        individualPause.addEventListener('click',()=>{const r=s.exercises[ex.id]||(s.exercises[ex.id]={});r.paused=!r.paused;changed();renderDetails();});
         card.append(individualPause);
         const note=node('textarea',{rows:2,maxLength:500,placeholder:'本次动作笔记，仅保存在本机',value:s.notes[ex.id]||'','aria-label':ex.name+' 本次笔记'});
         note.addEventListener('input',()=>{s.notes[ex.id]=note.value;save();});
@@ -135,7 +131,7 @@
           e.preventDefault();if(!form.reportValidity())return;
           if(!name.input.value.trim()||!reps.input.value.trim()){name.input.setCustomValidity(!name.input.value.trim()?'请输入动作名称':'');reps.input.setCustomValidity(!reps.input.value.trim()?'请输入次数或时间':'');form.reportValidity();name.input.setCustomValidity('');reps.input.setCustomValidity('');return;}
           editTemplate(id).exercises[ex.id]={name:name.input.value.trim(),sets:Number(sets.input.value),reps:reps.input.value.trim(),restSeconds:Number(rest.input.value),progression:progression.value};
-          cal.revision++;changed();renderDialog();message('动作模板已保存在本机，既有完成记录保留。');
+          cal.revision++;changed();renderDetails();message('动作模板已保存在本机，既有完成记录保留。');
         });
         details.append(form);card.append(details);body.append(card);
       }
@@ -150,7 +146,7 @@
       planForm.addEventListener('submit',e=>{
         e.preventDefault();const value={durationMinutes:Number(duration.input.value),warmupMinutes:Number(warm.input.value),cooldownMinutes:Number(cool.input.value),location:location.input.value.trim()};
         const problem=C.validateWorkout(value,C.slotMinutes(event));if(problem){error.textContent=problem;return;}
-        Object.assign(editTemplate(id),value);cal.revision++;changed();renderDialog();message('训练设置已保存；导出当前日历可带上新地点与计划。');
+        Object.assign(editTemplate(id),value);cal.revision++;changed();renderDetails();message('训练设置已保存；导出当前日历可带上新地点与计划。');
       });
       plan.append(planForm);body.append(plan);
     }
@@ -238,7 +234,7 @@
     save();renderProgress();reminderStatus();renderOverview();
     const timer=setInterval(()=>reminders(),30000);
     reminders();
-    return {open,renderOverview,completion,done,resetDay,workout,dateFor,currentSession,stop:()=>clearInterval(timer)};
+    return {open,mountInline,unmountInline,renderOverview,completion,done,resetDay,workout,dateFor,currentSession,stop:()=>clearInterval(timer)};
   }
   window.Calisthenics={init};
 })();

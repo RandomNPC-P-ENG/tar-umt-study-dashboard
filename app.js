@@ -1,6 +1,6 @@
 const TYPE={class:['正式课程','#397ac8'],study:['自主学习','#259d85'],fitness:['健身','#d17c38'],life:['生活','#89929d'],commute:['通勤','#a58dce'],free:['自由','#c5a246'],sleep:['睡眠','#65758d'],conflict:['课程冲突','#d34f55']};
-const KEY='tarumt-dashboard-v1',VERSION='cal2';
-let schedule=[],selected=0,shown=new Set(Object.keys(TYPE)),training=null;
+const KEY='tarumt-dashboard-v1',VERSION='cal4';
+let schedule=[],selected=0,shown=new Set(Object.keys(TYPE)),training=null,expandedWorkout=null;
 let state={done:{},added:{},hidden:{}},persist=true,unreadableSavedData=null;
 const $=id=>document.getElementById(id);
 const isObject=x=>x&&typeof x==='object'&&!Array.isArray(x);
@@ -28,6 +28,23 @@ function today() {
   return ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].indexOf(name);
 }
 function complete(event,day) {return event.workoutId&&training?training.done(event,day):!!state.done[event.id];}
+
+function workoutMeta(w,event,s) {
+  const count=w.exercises.filter(ex=>s.exercises[ex.id]&&s.exercises[ex.id].done).length;
+  return event.start+'–'+event.end+' · 预计 '+w.durationMinutes+' 分钟 · '+(s.paused?'本次暂停':s.complete?'已完成':'待完成')+' · 动作 '+count+'/'+w.exercises.length;
+}
+function refreshTraining() {
+  if(!training)return;
+  for(const card of $('events').querySelectorAll('.workout-event')) {
+    const id=card.dataset.workoutId,event=schedule[selected].items.find(e=>e.workoutId===id);
+    const w=training.workout(id),s=training.currentSession(training.dateFor(selected),id);
+    card.querySelector('.workout-event-meta').textContent=workoutMeta(w,event,s);
+  }
+  const items=[...schedule[selected].items,...(state.added[selected]||[])].filter(e=>e.type==='study'||e.type==='fitness');
+  $('progress').textContent='已完成 '+items.filter(e=>complete(e,selected)).length+' / '+items.length+' 项学习及健身任务';
+  training.renderOverview();
+}
+
 function render() {
   if(!schedule.length)return;
   $('days').replaceChildren();
@@ -50,6 +67,36 @@ function render() {
     const time=document.createElement('div');time.className='times';time.textContent=e.start;
     const end=document.createElement('small');end.textContent=e.end;time.append(end);
     const bar=document.createElement('div');bar.className='stripe';bar.style.background=(TYPE[e.type]||TYPE.life)[1];
+
+    if(e.workoutId&&training) {
+      const w=training.workout(e.workoutId),s=training.currentSession(training.dateFor(selected),w.id);
+      const card=document.createElement('details');card.className='eventbody workout-event';card.dataset.workoutId=w.id;
+      const summary=document.createElement('summary');summary.className='workout-event-summary';
+      const tag=document.createElement('span');tag.className='split-tag';tag.textContent='健身 · 三分化 '+w.id;
+      const title=document.createElement('strong');title.textContent=w.name;
+      const focus=document.createElement('span');focus.className='workout-focus';focus.textContent=w.focus;
+      const meta=document.createElement('span');meta.className='workout-event-meta';
+      meta.textContent=workoutMeta(w,e,s);
+      const hint=document.createElement('span');hint.className='workout-expand-hint';
+      const updateHint=()=>{hint.textContent=card.open?'收起训练详情 ▴':'展开动作清单 ▾';};
+      summary.append(tag,title,focus,meta,hint);
+      const content=document.createElement('div');content.className='workout-inline-content';
+      const expanded=expandedWorkout===e.id;
+      card.open=expanded;updateHint();card.append(summary,content);
+      card.addEventListener('toggle',()=>{
+        if(!card.isConnected)return;
+        updateHint();
+        if(card.open) {
+          expandedWorkout=e.id;
+          if(!content.childElementCount)training.mountInline(e.workoutId,selected,content);
+        } else if(expandedWorkout===e.id) {
+          expandedWorkout=null;training.unmountInline(content);content.replaceChildren();
+        }
+      });
+      row.classList.add('workout-event-row');row.append(time,bar,card);$('events').append(row);
+      if(expanded)training.mountInline(e.workoutId,selected,content);
+      continue;
+    }
     const body=document.createElement('div');body.className='eventbody';
     const check=document.createElement('input');check.type='checkbox';check.id='done-'+selected+'-'+e.id;check.setAttribute('aria-label',e.title);check.checked=complete(e,selected);
     if(e.workoutId&&training)check.disabled=!!training.currentSession(training.dateFor(selected),e.workoutId).paused;
@@ -64,11 +111,6 @@ function render() {
       sub.textContent=w.focus+' · 预计 '+w.durationMinutes+' 分钟';
     }
     label.append(sub);body.append(check,label);
-    if(e.workoutId&&training) {
-      const details=document.createElement('button');details.type='button';details.className='workout-open';details.textContent='动作清单';
-      details.setAttribute('aria-label',e.title+' 动作清单');
-      details.onclick=()=>training.open(e.workoutId,selected,details);body.append(details);
-    }
     if(e.custom) {
       const del=document.createElement('button');del.type='button';del.textContent='删除';
       del.onclick=()=>{state.added[selected]=state.added[selected].filter(x=>x.id!==e.id);delete state.done[e.id];save();render();};body.append(del);
@@ -83,6 +125,15 @@ function render() {
   $('progress').textContent='已完成 '+eligible.filter(x=>complete(x,selected)).length+' / '+eligible.length+' 项学习及健身任务';
   if(training)training.renderOverview();
 }
+
+function openWorkout(id,day) {
+  const event=schedule[day].items.find(e=>e.workoutId===id);
+  if(!event)return;
+  selected=day;expandedWorkout=event.id;shown.add('fitness');render();
+  const summary=$('events').querySelector('[data-workout-id="'+id+'"] > summary');
+  if(summary){summary.focus();summary.scrollIntoView({block:'start',behavior:'smooth'});}
+}
+
 function download(content,name,type) {
   const blob=new Blob([content],{type}),a=document.createElement('a');
   a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
@@ -108,7 +159,7 @@ Promise.all([
   fetch('TAR_UMT_202609_Calendar.ics?v='+VERSION).then(r=>r.ok?r.text():null).catch(()=>null)
 ]).then(([days,data,calendar])=>{
   schedule=days;selected=Math.max(0,today());
-  if(data&&window.Calisthenics&&window.TrainingCore)training=Calisthenics.init({data,schedule,calendar,getState:()=>state,save,getSelected:()=>selected,renderSchedule:render,download});
+  if(data&&window.Calisthenics&&window.TrainingCore)training=Calisthenics.init({data,schedule,calendar,getState:()=>state,save,getSelected:()=>selected,renderSchedule:render,download,openWorkout,refreshTraining});
   else $('trainingToday').textContent='训练模块暂未加载；原时间表仍可使用，请联网重新打开。';
   render();
 }).catch(()=>{$('events').textContent='无法加载时间表，请通过本地服务器或 HTTPS 打开。';});

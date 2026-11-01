@@ -15,14 +15,14 @@ dialog{width:min(740px,calc(100vw - 24px));max-height:calc(100dvh - 24px);paddin
 dialog::backdrop{background:#091426a8}
 .dialog-heading{position:sticky;top:0;background:inherit;z-index:1;display:flex;align-items:flex-start;gap:14px;justify-content:space-between;padding:16px;border-bottom:1px solid #d3dce8}
 .dialog-heading h2{font-size:20px}.dialog-heading p{font-size:13px}
-.dialog-heading button{flex-shrink:0}#workoutBody{padding:16px}
-#workoutBody label,.skill-form label,.panel details>label{display:block;margin:8px 0;font-size:14px}
-#workoutBody input:not([type=checkbox]),#workoutBody textarea,.panel textarea,#workoutBody select,.skill-form select{width:100%;min-width:0;padding:10px;border:1px solid #d3dce8;border-radius:9px;font:inherit;color:inherit;background:inherit;margin:5px 0 10px}
-.panel input[type=checkbox],#workoutBody input[type=checkbox]{width:20px;height:20px;margin:0;flex-shrink:0;accent-color:#174fa6}
-#workoutBody .inline-check{display:flex;align-items:flex-start;gap:9px}
+.dialog-heading button{flex-shrink:0}.workout-inline-content{padding:16px}
+.workout-inline-content label,.skill-form label,.panel details>label{display:block;margin:8px 0;font-size:14px}
+.workout-inline-content input:not([type=checkbox]),.workout-inline-content textarea,.panel textarea,.workout-inline-content select,.skill-form select{width:100%;min-width:0;padding:10px;border:1px solid #d3dce8;border-radius:9px;font:inherit;color:inherit;background:inherit;margin:5px 0 10px}
+.panel input[type=checkbox],.workout-inline-content input[type=checkbox]{width:20px;height:20px;margin:0;flex-shrink:0;accent-color:#174fa6}
+.workout-inline-content .inline-check{display:flex;align-items:flex-start;gap:9px}
 .workout-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .exercise{border:1px solid #d3dce8;border-left:4px solid #d17c38;border-radius:12px;padding:14px;margin:14px 0}
-#workoutBody .exercise-title{display:flex;gap:10px;align-items:center;font-size:16px}
+.workout-inline-content .exercise-title{display:flex;gap:10px;align-items:center;font-size:16px}
 .exercise-paused{border-left-style:dashed}.risk-tag{color:#945109;display:block;margin:6px 0}
 details{margin:14px 0}summary{cursor:pointer;font-weight:650;padding:9px 0}
 .exercise-editor,.plan-editor,.skill-form{margin-top:12px}
@@ -31,5 +31,24 @@ details{margin:14px 0}summary{cursor:pointer;font-weight:650;padding:9px 0}
 button:disabled,input:disabled{cursor:not-allowed;opacity:.6}
 textarea:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid #d17c38;outline-offset:3px}
 .eventbody{min-width:0;flex-wrap:wrap}.eventbody label{min-width:100px;overflow-wrap:anywhere}.workout-open{font-size:12px}
-@media(max-width:560px){.training-slots{grid-template-columns:1fr}.workout-card{gap:3px}.twocol{gap:8px}.calendar-download{width:100%;text-align:center}.dialog-heading{padding:12px}#workoutBody{padding:12px}.exercise{padding:11px}.eventbody .workout-open{margin-left:26px}.eventbody{gap:7px}}
-@media(prefers-color-scheme:dark){dialog{background:#1c2a3e;color:#ecf2fc;border-color:#40536d}.dialog-heading,.exercise,.skill-record{border-color:#40536d}.exercise{border-left-color:#d17c38}.training-caution{background:#3d3020;color:#ffe0b2;border-color:#87613b}.risk-tag{color:#f4bd7b}#workoutBody input:not([type=checkbox]),#workoutBody textarea,.panel textarea,#workoutBody select{background:#162338;color:#fff;border-color:#40536d}}
+@media(max-width:560px){.training-slots{grid-template-columns:1fr}.workout-card{gap:3px}.twocol{gap:8px}.calendar-download{width:100%;text-align:center}.dialog-heading{padding:12px}.workout-inline-content{padding:12px}.exercise{padding:11px}.eventbody .workout-open{margin-left:26px}.eventbody{gap:7px}}
+@media(prefers-color-scheme:dark){dialog{background:#1c2a3e;color:#ecf2fc;border-color:#40536d}.dialog-heading,.exercise,.skill-record{border-color:#40536d}.exercise{border-left-color:#d17c38}.training-caution{background:#3d3020;color:#ffe0b2;border-color:#87613b}.risk-tag{color:#f4bd7b}.workout-inline-content input:not([type=checkbox]),.workout-inline-content textarea,.panel textarea,.workout-inline-content select{background:#162338;color:#fff;border-color:#40536d}}
+
+/* Fitness cards expand directly inside the interactive timetable. */
+.workout-event.eventbody{display:block;padding:0;border:1px solid #d9b58b;overflow:hidden}
+.workout-event-row>.times{align-self:start;padding-top:16px}
+.workout-event-summary{display:flex;flex-direction:column;align-items:flex-start;gap:5px;list-style:none;margin:0;padding:16px;cursor:pointer;border-radius:11px}
+.workout-event-summary::-webkit-details-marker{display:none}
+.workout-event-summary strong{font-size:17px}
+.split-tag{font-size:11px;font-weight:750;letter-spacing:.5px;color:#945109}
+.workout-focus,.workout-event-meta{font-size:12px;font-weight:400;color:#66758a;overflow-wrap:anywhere}
+.workout-expand-hint{color:#945109;font-size:13px;margin-top:5px}
+.workout-event[open]>.workout-event-summary{border-bottom:1px solid #d9b58b;background:#fff8ed;border-radius:11px 11px 0 0}
+.workout-inline-content{padding:14px;min-width:0}
+.workout-inline-content:empty{display:none}
+.workout-inline-content .training-caution{font-size:13px}
+.workout-inline-content .exercise{margin:12px 0}
+.workout-event .workout-inline-content input[type=checkbox]{width:20px;height:20px}
+.workout-event .exercise-title strong{overflow-wrap:anywhere}
+@media(max-width:560px){.workout-event-summary{padding:12px;gap:5px}.workout-inline-content{padding:10px}.workout-inline-content .twocol{grid-template-columns:1fr}.workout-inline-content .exercise-title{align-items:flex-start}.workout-event-row{grid-template-columns:55px 4px minmax(0,1fr);gap:6px}.workout-event-summary strong{font-size:16px}}
+@media(prefers-color-scheme:dark){.workout-event.eventbody{border-color:#86613c}.workout-event[open]>.workout-event-summary{background:#302c29;border-color:#86613c}.split-tag,.workout-expand-hint{color:#f4bd7b}.workout-focus,.workout-event-meta{color:#aab8ca}}
