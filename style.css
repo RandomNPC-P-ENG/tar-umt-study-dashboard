@@ -52,3 +52,21 @@ textarea:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid #
 .workout-event .exercise-title strong{overflow-wrap:anywhere}
 @media(max-width:560px){.workout-event-summary{padding:12px;gap:5px}.workout-inline-content{padding:10px}.workout-inline-content .twocol{grid-template-columns:1fr}.workout-inline-content .exercise-title{align-items:flex-start}.workout-event-row{grid-template-columns:55px 4px minmax(0,1fr);gap:6px}.workout-event-summary strong{font-size:16px}}
 @media(prefers-color-scheme:dark){.workout-event.eventbody{border-color:#86613c}.workout-event[open]>.workout-event-summary{background:#302c29;border-color:#86613c}.split-tag,.workout-expand-hint{color:#f4bd7b}.workout-focus,.workout-event-meta{color:#aab8ca}}
+
+/* The timetable is the first-screen content; training lives in its event rows. */
+header{padding:6px 2px 8px}h1{font-size:25px;margin:2px 0}header p{font-size:12px}
+.notice{padding:0 12px;margin:4px 0 10px;border-radius:10px}
+.notice>summary{font-size:12px;padding:8px 0}
+.notice>div{padding-bottom:10px}
+.summary{margin:10px 0;gap:7px}.summary div{padding:7px 10px;border-radius:10px}.summary strong{font-size:18px}
+.sectiontitle{margin:12px 0 6px}.sectiontitle h2{font-size:18px}.sectiontitle p{margin:1px 0}
+.sectiontitle button{padding:6px 9px;font-size:12px}.filters{padding-bottom:8px;gap:5px}.filters button{padding:5px 8px}
+.inline-message{font-size:12px;margin:5px 0 8px;color:#945109}.inline-message:empty{display:none}
+.workout-event.eventbody{margin:0}
+.workout-event:not([open])>.workout-event-summary{display:grid;grid-template-columns:minmax(0,1fr) auto;padding:11px 12px;gap:4px 8px}
+.workout-event:not([open]) .split-tag,.workout-event:not([open]) .workout-focus{display:none}
+.workout-event:not([open]) .workout-event-summary strong{grid-column:1;font-size:15px}
+.workout-event:not([open]) .workout-event-meta{grid-column:1/-1;font-size:11px}
+.workout-event:not([open]) .workout-expand-hint{grid-column:2;grid-row:1;font-size:12px;margin:0;white-space:nowrap}
+@media(max-width:560px){main{padding-top:10px}.days button{padding:9px 0}.summary span{font-size:10px}.summary strong{font-size:17px}.eyebrow{font-size:10px}.eventbody{padding:10px;min-height:52px}.workout-event-row{grid-template-columns:68px 4px minmax(0,1fr)}}
+@media(prefers-color-scheme:dark){.inline-message{color:#f4bd7b}}

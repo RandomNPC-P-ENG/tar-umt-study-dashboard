@@ -48,22 +48,11 @@
         for(const value of Object.values(s.exercises))value.done=false;
       }
     }
-    function renderOverview() {
-      const todayDate=C.myDate(),todaySlot=scheduled.find(s=>s.day===C.weekday(todayDate));
-      $('trainingToday').textContent=todaySlot?'今天：'+workout(todaySlot.event.workoutId).name+' · '+todaySlot.event.start+'–'+todaySlot.event.end:'今天没有安排训练，按原时间表学习与恢复。';
-      $('trainingSlots').replaceChildren(...scheduled.map(({day,event})=>{
-        const w=workout(event.workoutId),s=currentSession(dateFor(day),w.id);
-        const b=node('button',{type:'button',class:'workout-card'+(day===ctx.getSelected()?' selected':'')});
-        b.append(node('strong',{text:names[day]+' '+event.start+'–'+event.end}),node('span',{text:w.name}),node('small',{text:w.focus+' · 预计 '+w.durationMinutes+' 分钟 · '+(s.paused?'本次暂停':s.complete?'已完成':'待完成')}));
-        b.addEventListener('click',()=>open(event.workoutId,day,b));
-        return b;
-      }));
-      const conflicts=C.collisions(schedule,ctx.getState().added);
-      $('trainingConflicts').textContent='原有周四课程冲突仍待确认。'+(conflicts.length>1?'另有个人安排重叠，请查看：'+conflicts.filter(x=>!(x.a.event.type==='conflict'&&x.b.event.type==='conflict')).map(x=>names[x.day]+' '+x.a.event.title+' / '+x.b.event.title).join('；'):'训练没有新增作息冲突。');
-      const legacy=Object.values(cal.legacyFitnessDone).filter(Boolean).length;
-      $('trainingLegacy').textContent=legacy?'旧健身完成标记已保留 '+legacy+' 条，没有自动计为新动作或技能成绩。':'原有学习勾选、个人任务和设置继续保留；训练按实际日期单独记录。';
+    function refreshConflicts() {
+      const conflicts=C.collisions(schedule,ctx.getState().added).filter(x=>!(x.a.event.type==='conflict'&&x.b.event.type==='conflict'));
+      const notice=$('trainingConflicts');
+      notice.textContent=conflicts.length?'个人安排重叠：'+conflicts.map(x=>names[x.day]+' '+x.a.event.title+' / '+x.b.event.title).join('；'):'';
     }
-    function open(id,day) {ctx.openWorkout(id,day);}
     function mountInline(id,day,host) {
       const same=active&&active.id===id&&active.day===day;
       active={id,day,host,event:scheduled.find(s=>s.day===day&&s.event.workoutId===id).event};
@@ -231,10 +220,10 @@
         message('已导出 32 个事件，保留既有 UID；不会自动导入或同步到 Google Calendar。重复导入前请先替换专用日历中的旧版。');
       }catch(error){message(error.message);}
     });
-    save();renderProgress();reminderStatus();renderOverview();
+    save();renderProgress();reminderStatus();refreshConflicts();
     const timer=setInterval(()=>reminders(),30000);
     reminders();
-    return {open,mountInline,unmountInline,renderOverview,completion,done,resetDay,workout,dateFor,currentSession,stop:()=>clearInterval(timer)};
+    return {mountInline,unmountInline,refreshConflicts,completion,done,resetDay,workout,dateFor,currentSession,stop:()=>clearInterval(timer)};
   }
   window.Calisthenics={init};
 })();

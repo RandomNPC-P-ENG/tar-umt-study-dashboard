@@ -1,5 +1,5 @@
 const TYPE={class:['正式课程','#397ac8'],study:['自主学习','#259d85'],fitness:['健身','#d17c38'],life:['生活','#89929d'],commute:['通勤','#a58dce'],free:['自由','#c5a246'],sleep:['睡眠','#65758d'],conflict:['课程冲突','#d34f55']};
-const KEY='tarumt-dashboard-v1',VERSION='cal4';
+const KEY='tarumt-dashboard-v1',VERSION='cal5';
 let schedule=[],selected=0,shown=new Set(Object.keys(TYPE)),training=null,expandedWorkout=null;
 let state={done:{},added:{},hidden:{}},persist=true,unreadableSavedData=null;
 const $=id=>document.getElementById(id);
@@ -42,7 +42,7 @@ function refreshTraining() {
   }
   const items=[...schedule[selected].items,...(state.added[selected]||[])].filter(e=>e.type==='study'||e.type==='fitness');
   $('progress').textContent='已完成 '+items.filter(e=>complete(e,selected)).length+' / '+items.length+' 项学习及健身任务';
-  training.renderOverview();
+  training.refreshConflicts();
 }
 
 function render() {
@@ -78,7 +78,7 @@ function render() {
       const meta=document.createElement('span');meta.className='workout-event-meta';
       meta.textContent=workoutMeta(w,e,s);
       const hint=document.createElement('span');hint.className='workout-expand-hint';
-      const updateHint=()=>{hint.textContent=card.open?'收起训练详情 ▴':'展开动作清单 ▾';};
+      const updateHint=()=>{hint.textContent=card.open?'收起训练详情 ▴':'详情 ▾';};
       summary.append(tag,title,focus,meta,hint);
       const content=document.createElement('div');content.className='workout-inline-content';
       const expanded=expandedWorkout===e.id;
@@ -123,15 +123,7 @@ function render() {
   }
   const eligible=items.filter(x=>x.type==='study'||x.type==='fitness');
   $('progress').textContent='已完成 '+eligible.filter(x=>complete(x,selected)).length+' / '+eligible.length+' 项学习及健身任务';
-  if(training)training.renderOverview();
-}
-
-function openWorkout(id,day) {
-  const event=schedule[day].items.find(e=>e.workoutId===id);
-  if(!event)return;
-  selected=day;expandedWorkout=event.id;shown.add('fitness');render();
-  const summary=$('events').querySelector('[data-workout-id="'+id+'"] > summary');
-  if(summary){summary.focus();summary.scrollIntoView({block:'start',behavior:'smooth'});}
+  if(training)training.refreshConflicts();
 }
 
 function download(content,name,type) {
@@ -159,8 +151,8 @@ Promise.all([
   fetch('TAR_UMT_202609_Calendar.ics?v='+VERSION).then(r=>r.ok?r.text():null).catch(()=>null)
 ]).then(([days,data,calendar])=>{
   schedule=days;selected=Math.max(0,today());
-  if(data&&window.Calisthenics&&window.TrainingCore)training=Calisthenics.init({data,schedule,calendar,getState:()=>state,save,getSelected:()=>selected,renderSchedule:render,download,openWorkout,refreshTraining});
-  else $('trainingToday').textContent='训练模块暂未加载；原时间表仍可使用，请联网重新打开。';
+  if(data&&window.Calisthenics&&window.TrainingCore)training=Calisthenics.init({data,schedule,calendar,getState:()=>state,save,getSelected:()=>selected,renderSchedule:render,download,refreshTraining});
+  else $('trainingMessage').textContent='训练模块暂未加载；原时间表仍可使用，请联网重新打开。';
   render();
 }).catch(()=>{$('events').textContent='无法加载时间表，请通过本地服务器或 HTTPS 打开。';});
 const offlineStatus=$('offlineStatus');

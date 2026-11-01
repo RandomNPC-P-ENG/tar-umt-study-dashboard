@@ -102,17 +102,17 @@ test('five-minute reminders use Malaysian date, semester bounds, session pause a
 test('service worker precaches every training dependency and serves navigation offline',async()=>{
  const handlers={},store=new Map(),scope='https://example.test/tar-umt-study-dashboard/';
  const cache={put:async(url,response)=>store.set(String(url),response),match:async()=>null};
- const caches={open:async()=>cache,keys:async()=>['other-app','tarumt-study-dashboard-old','tarumt-study-dashboard-cal4'],delete:async k=>{assert.equal(k,'tarumt-study-dashboard-old');return true;},match:async(req,options)=>store.get(typeof req==='string'?req:String(req.url||req))||([...store].find(([k])=>options?.ignoreSearch&&k.split('?')[0]===req.url.split('?')[0])||[])[1]};
+ const caches={open:async()=>cache,keys:async()=>['other-app','tarumt-study-dashboard-old','tarumt-study-dashboard-cal5'],delete:async k=>{assert.equal(k,'tarumt-study-dashboard-old');return true;},match:async(req,options)=>store.get(typeof req==='string'?req:String(req.url||req))||([...store].find(([k])=>options?.ignoreSearch&&k.split('?')[0]===req.url.split('?')[0])||[])[1]};
  let offline=false,claimed=false,skipped=false;
  const fetch=async request=>{if(offline)throw Error('offline');const url=new URL(typeof request==='string'?request:request.url);assert.ok(fs.existsSync(path.join(root,url.pathname.split('/').pop()||'index.html')));return new Response('cached '+url.pathname);};
  const self={registration:{scope},addEventListener:(n,fn)=>handlers[n]=fn,skipWaiting:async()=>{skipped=true;},clients:{claim:async()=>{claimed=true;}}};
  vm.runInNewContext(read('sw.js'),{self,caches,fetch,Request,Response,URL,Promise});
  let pending;await handlers.install({waitUntil:p=>pending=p});await pending;assert.equal(skipped,true);
- for(const name of ['training-core.js','calisthenics.js','workouts.json','app.js','schedule.json','TAR_UMT_202609_Calendar.ics'])assert.ok(store.has(scope+name+'?v=cal4'));
+ for(const name of ['training-core.js','calisthenics.js','workouts.json','app.js','schedule.json','TAR_UMT_202609_Calendar.ics'])assert.ok(store.has(scope+name+'?v=cal5'));
  handlers.activate({waitUntil:p=>pending=p});await pending;assert.equal(claimed,true);
  offline=true;handlers.fetch({request:{url:scope+'?release=test',method:'GET',mode:'navigate'},respondWith:p=>pending=p});
  assert.match(await (await pending).text(),/index.html/);
- handlers.fetch({request:{url:scope+'workouts.json?v=cal4',method:'GET',mode:'cors'},respondWith:p=>pending=p});
+ handlers.fetch({request:{url:scope+'workouts.json?v=cal5',method:'GET',mode:'cors'},respondWith:p=>pending=p});
  assert.match(await (await pending).text(),/workouts.json/);
  let intercepted=false;handlers.fetch({request:{url:'https://other.test/file',method:'GET'},respondWith:()=>intercepted=true});assert.equal(intercepted,false);
 });
