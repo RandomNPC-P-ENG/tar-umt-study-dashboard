@@ -1,5 +1,5 @@
 const TYPE={class:['正式课程','#397ac8'],study:['自主学习','#259d85'],fitness:['健身','#d17c38'],life:['生活','#89929d'],commute:['通勤','#a58dce'],free:['自由','#c5a246'],sleep:['睡眠','#65758d'],conflict:['课程冲突','#d34f55']};
-const KEY='tarumt-dashboard-v1',VERSION='cal5';
+const KEY='tarumt-dashboard-v1',VERSION='cal6';
 let schedule=[],selected=0,shown=new Set(Object.keys(TYPE)),training=null,expandedWorkout=null;
 let state={done:{},added:{},hidden:{}},persist=true,unreadableSavedData=null;
 const $=id=>document.getElementById(id);
@@ -55,7 +55,9 @@ function render() {
   $('dayTitle').textContent=['周一','周二','周三','周四','周五','周六','周日'][selected];
   $('dateTitle').textContent='每周重复 · '+schedule[selected].day;
   $('filters').replaceChildren();
+  const hasConflicts=[...schedule.flatMap(d=>d.items),...Object.values(state.added).flat()].some(e=>e.type==='conflict');
   Object.entries(TYPE).forEach(([key,[name,color]])=>{
+    if(key==='conflict'&&!hasConflicts)return;
     const b=document.createElement('button');b.textContent='● '+name;b.style.color=color;b.className=shown.has(key)?'':'off';
     b.setAttribute('aria-pressed',String(shown.has(key)));
     b.onclick=()=>{shown.has(key)?shown.delete(key):shown.add(key);render();};$('filters').append(b);

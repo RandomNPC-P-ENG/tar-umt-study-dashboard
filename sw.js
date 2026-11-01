@@ -1,5 +1,5 @@
 const CACHE_PREFIX = 'tarumt-study-dashboard-';
-const VERSION = 'cal5';
+const VERSION = 'cal6';
 const CACHE = CACHE_PREFIX + VERSION;
 const FILES = [
   'index.html','style.css','app.js','training-core.js','calisthenics.js',

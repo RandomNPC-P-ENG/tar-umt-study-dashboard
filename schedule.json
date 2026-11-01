@@ -357,16 +357,9 @@
       {
         "start": "12:30",
         "end": "14:00",
-        "title": "AGGE1023 Statistics · Tutorial · M202（冲突待确认）",
-        "type": "conflict",
+        "title": "AGGE1023 Statistics · Tutorial · M202",
+        "type": "class",
         "id": "3-6"
-      },
-      {
-        "start": "13:00",
-        "end": "15:00",
-        "title": "AJEL1523 Integrative English · Tutorial · M204（冲突待确认）",
-        "type": "conflict",
-        "id": "3-7"
       },
       {
         "start": "15:00",

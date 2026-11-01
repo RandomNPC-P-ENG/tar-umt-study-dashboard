@@ -49,7 +49,7 @@
       }
     }
     function refreshConflicts() {
-      const conflicts=C.collisions(schedule,ctx.getState().added).filter(x=>!(x.a.event.type==='conflict'&&x.b.event.type==='conflict'));
+      const conflicts=C.collisions(schedule,ctx.getState().added);
       const notice=$('trainingConflicts');
       notice.textContent=conflicts.length?'个人安排重叠：'+conflicts.map(x=>names[x.day]+' '+x.a.event.title+' / '+x.b.event.title).join('；'):'';
     }
@@ -217,7 +217,7 @@
       try {
         if(!ctx.calendar)throw new Error('默认日历未加载，请联网刷新后再导出。');
         ctx.download(C.updateCalendar(ctx.calendar,data,schedule,cal),'TAR_UMT_202609_Calisthenics.ics','text/calendar;charset=utf-8');
-        message('已导出 32 个事件，保留既有 UID；不会自动导入或同步到 Google Calendar。重复导入前请先替换专用日历中的旧版。');
+        message('已导出当前日历，保留其余活动的 UID；不会自动导入或同步到 Google Calendar。重复导入前请先替换专用日历中的旧版。');
       }catch(error){message(error.message);}
     });
     save();renderProgress();reminderStatus();refreshConflicts();
