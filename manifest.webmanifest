@@ -1,0 +1,24 @@
+{
+  "name": "TAR UMT Study Dashboard",
+  "short_name": "Study Dashboard",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3f6fb",
+  "theme_color": "#102344",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "id": "./",
+  "lang": "zh-CN",
+  "description": "TAR UMT 七天学习计划、课程冲突提示与 Google Calendar 日历下载"
+}
